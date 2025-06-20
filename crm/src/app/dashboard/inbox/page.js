@@ -1,11 +1,10 @@
-"use client";
 import { InboxSidebar } from "@/components/main/InboxSidebar";
 import { ChatView } from "@/components/main/ChatView";
 import { Suspense } from "react";
 
 export default function InboxPage() {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Suspense fallback={<div className="p-4">Loading sidebar...</div>}>
         <InboxSidebar />
       </Suspense>
