@@ -1,14 +1,19 @@
 "use client";
-
-import { ChatView } from "@/components/main/ChatView";
-import { InboxSidebar } from "@/components/main/InboxSidebar";
+import { InboxSidebar } from "@/components/InboxSidebar";
+import { ChatView } from "@/components/ChatView";
+import { Suspense } from "react";
 
 export default function InboxPage() {
   return (
     <div className="flex">
-      <InboxSidebar />
+      <Suspense fallback={<div className="p-4">Loading sidebar...</div>}>
+        <InboxSidebar />
+      </Suspense>
+
       <div className="flex-1">
-        <ChatView />
+        <Suspense fallback={<div className="p-4">Loading chat...</div>}>
+          <ChatView />
+        </Suspense>
       </div>
     </div>
   );
