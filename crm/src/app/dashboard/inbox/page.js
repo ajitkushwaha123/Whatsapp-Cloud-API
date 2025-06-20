@@ -1,6 +1,6 @@
 "use client";
-import { InboxSidebar } from "@/components/InboxSidebar";
-import { ChatView } from "@/components/ChatView";
+import { InboxSidebar } from "@/components/main/InboxSidebar";
+import { ChatView } from "@/components/main/ChatView";
 import { Suspense } from "react";
 
 export default function InboxPage() {

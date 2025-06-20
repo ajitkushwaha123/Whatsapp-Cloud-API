@@ -15,18 +15,25 @@ export function ChatView() {
     fetcher
   );
 
-  if (!from) return <div className="p-6">Select a chat</div>;
+  if (!from) {
+    return (
+      <div className="h-screen flex items-center justify-center text-gray-500">
+        Select a chat to view messages
+      </div>
+    );
+  }
 
   return (
-    <ScrollArea className="h-screen p-6 flex flex-col gap-2">
-      <h2 className="text-xl font-bold mb-4">Chat with {from}</h2>
+    <ScrollArea className="h-screen p-6 flex flex-col gap-2 overflow-y-auto">
+      <h2 className="text-xl font-bold mb-4 text-gray-700">Chat with {from}</h2>
+
       {isLoading ? (
-        <p>Loading messages...</p>
-      ) : (
-        data?.messages?.map((msg) => (
+        <p className="text-gray-500">Loading messages...</p>
+      ) : data?.messages?.length ? (
+        data.messages.map((msg) => (
           <div
             key={msg._id}
-            className={`p-3 rounded-lg max-w-[60%] ${
+            className={`p-3 rounded-lg max-w-[70%] break-words ${
               msg.direction === "incoming"
                 ? "bg-gray-100 self-start"
                 : "bg-green-100 self-end"
@@ -38,6 +45,8 @@ export function ChatView() {
             </span>
           </div>
         ))
+      ) : (
+        <p className="text-sm text-gray-400">No messages found</p>
       )}
     </ScrollArea>
   );
