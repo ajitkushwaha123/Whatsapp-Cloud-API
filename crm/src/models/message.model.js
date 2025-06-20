@@ -32,6 +32,7 @@ const MessageSchema = new mongoose.Schema(
       enum: ["sent", "delivered", "read"],
       default: "sent",
     },
+    profileName: String,
   },
   { timestamps: true }
 );

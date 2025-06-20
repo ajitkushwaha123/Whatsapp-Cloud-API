@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import messageModel from "@/models/message.model";
 
-
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -25,6 +24,8 @@ export async function POST(req) {
     await dbConnect();
     const body = await req.json();
 
+    console.log("body", body);
+
     const entry = body?.entry?.[0];
     const change = entry?.changes?.[0];
     const value = change?.value;
@@ -41,6 +42,7 @@ export async function POST(req) {
         message,
         type: msg.type || "text",
         direction: "incoming",
+        profileName: msg?.profile?.name || null,
       });
 
       console.log("✅ Message saved from", from);
