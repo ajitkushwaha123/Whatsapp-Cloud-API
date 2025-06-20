@@ -9,6 +9,16 @@ import clsx from "clsx";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+function formatTime(time) {
+  const date = new Date(time);
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
+
+  return isToday
+    ? date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    : date.toLocaleDateString();
+}
+
 export function InboxSidebar() {
   const router = useRouter();
   const params = useSearchParams();
@@ -42,17 +52,14 @@ export function InboxSidebar() {
                   )
                 }
               >
-                <div className="font-medium text-sm truncate">{chat._id}</div>
+                <div className="font-medium text-sm truncate">
+                  {chat.profileName || chat._id}
+                </div>
                 <div className="text-xs text-gray-600 truncate">
                   {chat.lastMessage || "No message"}
                 </div>
                 <div className="text-[10px] text-gray-400 mt-1">
-                  {chat.lastTime
-                    ? new Date(chat.lastTime).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    : ""}
+                  {chat.lastTime ? formatTime(chat.lastTime) : ""}
                 </div>
               </Card>
             ))

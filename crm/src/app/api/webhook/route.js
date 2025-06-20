@@ -24,29 +24,42 @@ export async function POST(req) {
     await dbConnect();
     const body = await req.json();
 
-    console.log("body", body);
-
     const entry = body?.entry?.[0];
     const change = entry?.changes?.[0];
     const value = change?.value;
-    const msg = value?.messages?.[0];
 
-    if (msg && msg.text?.body) {
-      const from = msg.from;
-      const to = value.metadata.display_phone_number;
-      const message = msg.text.body;
+    const contact = value?.contacts?.[0];
+    const message = value?.messages?.[0];
 
-      await messageModel.create({
-        from,
-        to,
-        message,
-        type: msg.type || "text",
-        direction: "incoming",
-        profileName: msg?.profile?.name || null,
-      });
-
-      console.log("✅ Message saved from", from);
+    if (!message || !contact) {
+      return NextResponse.json({ ignored: true }, { status: 200 });
     }
+
+    const from = message.from;
+    const to = value.metadata.display_phone_number;
+    const waId = contact.wa_id;
+    const profileName = contact.profile?.name || null;
+    const type = message.type || "text";
+    const text = message?.text?.body || null;
+    const timestamp = new Date(parseInt(message.timestamp) * 1000);
+
+    const messageData = {
+      messageId: message.id,
+      timestamp,
+      from,
+      to,
+      waId,
+      profileName,
+      type,
+      text,
+      direction: "incoming",
+      phoneNumberId: value.metadata.phone_number_id,
+      displayPhoneNumber: value.metadata.display_phone_number,
+    };
+
+    await messageModel.create(messageData);
+
+    console.log("✅ Message saved from:", from);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

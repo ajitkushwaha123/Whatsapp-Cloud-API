@@ -2,37 +2,25 @@ import mongoose from "mongoose";
 
 const MessageSchema = new mongoose.Schema(
   {
-    from: {
-      type: String,
-      required: true,
-    },
-    to: {
-      type: String,
-      required: true,
-    },
-    message: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      enum: ["text", "image", "template"],
-      default: "text",
-    },
+    messageId: { type: String, required: true, unique: true },
+    timestamp: { type: Date, required: true },
+
+    from: { type: String, required: true },
+    to: { type: String, required: true },
+
+    profileName: { type: String },
+    waId: { type: String },
+
+    type: { type: String, required: true },
+    text: { type: String },
+
     direction: {
       type: String,
       enum: ["incoming", "outgoing"],
-      required: true,
+      default: "incoming",
     },
-    waId: {
-      type: String,
-    },
-    status: {
-      type: String,
-      enum: ["sent", "delivered", "read"],
-      default: "sent",
-    },
-    profileName: String,
+    phoneNumberId: { type: String },
+    displayPhoneNumber: { type: String },
   },
   { timestamps: true }
 );
